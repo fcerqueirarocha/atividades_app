@@ -13,7 +13,7 @@ def create_app():
     app = Flask(__name__, static_folder="static", static_url_path="/")
 
     # Configurações do Banco de Dados
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+mysqlconnector://root:root123@localhost/atividades_db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "mysql+mysqlconnector://root:root123@localhost/atividades_db") 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     # Configuração do JWT
