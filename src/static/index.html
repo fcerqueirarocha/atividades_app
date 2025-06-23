@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Atividades Pendentes</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!-- Página de Login -->
+    <div id="login-page" class="auth-container">
+        <div class="card">
+            <div class="header">
+                <h1>Login</h1>
+                <p>Acesse seu sistema de atividades</p>
+            </div>
+            
+            <div id="login-alert"></div>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email:</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Senha:</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%;">Entrar</button>
+            </form>
+            
+            <div class="auth-links">
+                <p>Não tem uma conta? <a href="#" onclick="showRegister()">Cadastre-se</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página de Registro -->
+    <div id="register-page" class="auth-container hidden">
+        <div class="card">
+            <div class="header">
+                <h1>Cadastro</h1>
+                <p>Crie sua conta para gerenciar atividades</p>
+            </div>
+            
+            <div id="register-alert"></div>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Nome Completo:</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-email">Email:</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-password">Senha:</label>
+                    <input type="password" id="register-password" required minlength="6">
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%;">Cadastrar</button>
+            </form>
+            
+            <div class="auth-links">
+                <p>Já tem uma conta? <a href="#" onclick="showLogin()">Faça login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Página Principal -->
+    <div id="main-page" class="hidden">
+        <button class="logout-btn" onclick="logout()">Sair</button>
+        
+        <div class="container">
+            <div class="header">
+                <h1>Minhas Atividades</h1>
+                <p id="user-welcome">Bem-vindo ao seu sistema de gerenciamento de tarefas</p>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-activities">0</div>
+                    <div class="stat-label">Total de Atividades</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pending-activities">0</div>
+                    <div class="stat-label">Atividades Pendentes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completed-activities">0</div>
+                    <div class="stat-label">Atividades Concluídas</div>
+                </div>
+            </div>
+
+            <!-- Nova Atividade -->
+            <div class="card">
+                <h2>Nova Atividade</h2>
+                <div id="activity-alert"></div>
+                <form id="new-activity-form">
+                    <div class="form-group">
+                        <label for="activity-description">Descrição:</label>
+                        <input type="text" id="activity-description" placeholder="Digite a descrição da atividade..." required>
+                    </div>
+                    <button type="submit" class="btn">Adicionar Atividade</button>
+                </form>
+            </div>
+
+            <!-- Lista de Atividades -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Lista de Atividades</h2>
+                    <button id="save-changes-btn" class="btn btn-success hidden" onclick="saveChanges()">Salvar Alterações</button>
+                </div>
+                
+                <div class="toggle-container">
+                    <label class="toggle">
+                        <input type="checkbox" id="pending-toggle" checked onchange="toggleActivityView()">
+                        <span class="slider"></span>
+                    </label>
+                    <label for="pending-toggle" style="font-weight: 600; cursor: pointer;">
+                        <span id="toggle-label">Mostrar Pendentes</span>
+                    </label>
+                </div>
+
+                <div id="activities-loading" class="loading hidden">Carregando atividades...</div>
+                <div id="activities-container"></div>
+                <div id="no-activities" class="hidden" style="text-align: center; padding: 40px; color: #666;">
+                    <p>Nenhuma atividade encontrada.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>

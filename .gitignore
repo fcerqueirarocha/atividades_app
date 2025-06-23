@@ -1,0 +1,5 @@
+# Não subir a pasta venv
+venv/
+
+# Não subir __pycache__ em src e subpastas
+src/**/__pycache__/
