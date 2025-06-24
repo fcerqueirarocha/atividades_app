@@ -1,2 +1,3 @@
-web: gunicorn --factory src.main:create_app
+web: gunicorn src.main:create_app()
+
 
