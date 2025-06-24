@@ -111,41 +111,37 @@ def toggle_activity_status(activity_id):
     """R3 - Marcar/desmarcar atividade como finalizada"""
     try:
         user_id = get_jwt_identity()
+
         activity = Activity.query.filter_by(id=activity_id, users_id=user_id).first()
-        
         if not activity:
             return jsonify({'error': 'Atividade não encontrada'}), 404
-        
-        data = request.get_json()
-        completed = data.get('completed', False) if data else False
-        
+
+        data = request.get_json(silent=True) or {}
+        completed = data.get('completed', False)
+
         if completed:
-            # Marcar como finalizada
             if activity.resolution_date is None:
                 activity.resolution_date = datetime.utcnow()
                 message = 'Atividade marcada como finalizada'
             else:
                 message = 'Atividade já estava finalizada'
         else:
-            # Marcar como pendente
             if activity.resolution_date is not None:
                 activity.resolution_date = None
                 message = 'Atividade marcada como pendente'
             else:
                 message = 'Atividade já estava pendente'
-        
+
         activity.updated_at = datetime.utcnow()
         db.session.commit()
-        
+
         return jsonify({
             'message': message,
             'activity': activity.to_dict()
         }), 200
-        
+
     except Exception as e:
-        db.session.rollback()
-        # Retorna o erro detalhado
-        return jsonify({'error': f'Erro ao alternar status da atividade: {str(e)}'}), 500
+        return jsonify({'error': str(e)}), 500
 
 @activity_bp.route('/activities/bulk-toggle', methods=['PUT'])
 @jwt_required()
