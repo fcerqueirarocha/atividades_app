@@ -28,7 +28,7 @@ def register():
         return jsonify({"error": "Email já cadastrado"}), 409
 
     hashed_password = generate_password_hash(password).decode("utf-8")
-    new_user = User(full_name=full_name, email=email, pass_hash=hashed_password)
+    new_user = User(full_name=full_name, email=email, pass_=hashed_password)
 
     try:
         db.session.add(new_user)
