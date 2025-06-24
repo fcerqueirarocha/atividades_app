@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: atividades-app
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: 'gunicorn "src.main:create_app()"'
+    pythonVersion: 3.11.9
+    autoDeploy: true
