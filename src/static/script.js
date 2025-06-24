@@ -197,7 +197,7 @@ function renderActivities() {
         activityItem.innerHTML = `
             <input type="checkbox" class="activity-checkbox" data-id="${activity.id}" ${activity.resolution_date ? "checked" : ""}>
             <span class="activity-description">${activity.description}</span>
-            <span class="activity-date">${activity.resolution_date ? `Concluída em: ${new Date(activity.resolution_date).toLocaleString()}` : "Pendente"}</span>
+            <span class="activity-date">${activity.resolution_date ? `Concluída em: ${new Date(activity.resolution_date).toLocaleString()}` : `Pendente desde: ${new Date(activity.created_at).toLocaleString()}`}</span>
             <div class="activity-actions">
                 <button class="btn btn-danger btn-small" onclick="deleteActivity(\'${activity.id}\')">Excluir</button>
             </div>

@@ -20,7 +20,7 @@ def get_activities():
             activities = Activity.query.filter_by(
                 users_id=int(user_id),
                 resolution_date=None
-            ).order_by(Activity.created_at.desc()).all()
+            ).order_by(Activity.created_at.asc()).all()
         else:
             # Listar atividades finalizadas (resolution_date não é null)
             activities = Activity.query.filter(
