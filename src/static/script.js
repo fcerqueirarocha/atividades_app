@@ -109,7 +109,7 @@ async function login(event) {
         const data = await response.json();
         if (response.ok) {
             localStorage.setItem("authToken", data.access_token);
-            localStorage.setItem("userName", data.user_name);
+            localStorage.setItem("userName", data.user.full_name);
             showAlert(loginAlert, data.message, "success");
             loginForm.reset();
             showMainPage();
