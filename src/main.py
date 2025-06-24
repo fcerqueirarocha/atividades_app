@@ -76,6 +76,10 @@ def create_app():
     def serve_index():
         return send_from_directory(app.static_folder, "index.html")
 
+    # Criar tabelas automaticamente no banco de dados
+    with app.app_context():
+        db.create_all()
+        
     return app
 
 if __name__ == "__main__":
