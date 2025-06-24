@@ -10,7 +10,7 @@ activity_bp = Blueprint('activity', __name__)
 def get_activities():
     """R3 - Listar atividades (pendentes ou finalizadas)"""
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         
         # Parâmetro para filtrar pendentes (default: True)
         show_pending = request.args.get('pending', 'true').lower() == 'true'
@@ -43,7 +43,7 @@ def get_activities():
 def create_activity():
     """Criar nova atividade"""
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         data = request.get_json()
         
         if not data:
@@ -76,7 +76,7 @@ def create_activity():
 def update_activity(activity_id):
     """Atualizar atividade (descrição)"""
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         activity = Activity.query.filter_by(id=activity_id, users_id=user_id).first()
         
         if not activity:
@@ -110,7 +110,7 @@ def update_activity(activity_id):
 def toggle_activity_status(activity_id):
     """R3 - Marcar/desmarcar atividade como finalizada"""
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
 
         activity = Activity.query.filter_by(id=activity_id, users_id=user_id).first()
         if not activity:
@@ -148,7 +148,7 @@ def toggle_activity_status(activity_id):
 def bulk_toggle_activities():
     """R3 - Marcar/desmarcar múltiplas atividades"""
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         data = request.get_json()
         
         if not data or 'activities' not in data:
@@ -188,7 +188,7 @@ def bulk_toggle_activities():
 def delete_activity(activity_id):
     """Excluir atividade"""
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         activity = Activity.query.filter_by(id=activity_id, users_id=user_id).first()
         
         if not activity:
