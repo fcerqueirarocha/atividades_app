@@ -18,13 +18,13 @@ def get_activities():
         if show_pending:
             # Listar atividades pendentes (resolution_date é null)
             activities = Activity.query.filter_by(
-                users_id=user_id,
+                users_id=int(user_id),
                 resolution_date=None
             ).order_by(Activity.created_at.desc()).all()
         else:
             # Listar atividades finalizadas (resolution_date não é null)
             activities = Activity.query.filter(
-                Activity.users_id == user_id,
+                Activity.users_id == int(user_id),
                 Activity.resolution_date.isnot(None)
             ).order_by(Activity.resolution_date.desc()).all()
         
