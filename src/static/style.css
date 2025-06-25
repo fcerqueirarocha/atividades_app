@@ -40,11 +40,11 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     padding: 30px;
     margin-bottom: 20px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /*transition: transform 0.3s ease, box-shadow 0.3s ease;*/
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    /*transform: translateY(-5px);*/
     box-shadow: 0 15px 40px rgba(0,0,0,0.25);
 }
 
@@ -70,7 +70,7 @@ body {
     border: 2px solid #e1e5e9;
     border-radius: 8px;
     font-size: 16px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    /*transition: border-color 0.3s ease, box-shadow 0.3s ease;*/
 }
 
 .form-group input:focus {
@@ -88,14 +88,14 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    /*transition: all 0.3s ease;*/
     text-decoration: none;
     display: inline-block;
     text-align: center;
 }
 
 .btn:hover {
-    transform: translateY(-2px);
+    /*transform: translateY(-2px);*/
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
@@ -144,7 +144,7 @@ body {
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    transition: .4s;
+    /*transition: .4s;*/
     border-radius: 34px;
 }
 
@@ -156,7 +156,7 @@ body {
     left: 4px;
     bottom: 4px;
     background-color: white;
-    transition: .4s;
+    /*transition: .4s;*/
     border-radius: 50%;
 }
 
@@ -175,7 +175,7 @@ input:checked + .slider:before {
     border: 2px solid #e1e5e9;
     border-radius: 10px;
     margin-bottom: 10px;
-    transition: all 0.3s ease;
+    /*transition: all 0.3s ease;*/
     background: #f8f9fa;
 }
 
@@ -291,7 +291,7 @@ input:checked + .slider:before {
     padding: 8px 15px;
     border-radius: 5px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    /*transition: all 0.3s ease;*/
 }
 
 .logout-btn:hover {
