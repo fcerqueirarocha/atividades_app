@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.models.user import Activity, db
 from datetime import datetime
+from sqlalchemy import func, case
+
 
 activity_bp = Blueprint('activity', __name__)
 
@@ -34,6 +36,28 @@ def get_activities():
             'count': len(activities)
         }), 200
         
+    except Exception as e:
+        # Retorna o erro detalhado
+        return jsonify({'error': f'Erro interno do servidor: {str(e)}'}), 500
+
+@activity_bp.route('/stats', methods=['GET'])
+@jwt_required()
+def get_stats():
+    """R3 - Listar atividades (pendentes ou finalizadas)"""
+    try:
+        user_id = int(get_jwt_identity())
+        
+        stats = db.session.query(
+            func.count(Activity.id).label("total"),
+            func.count(case((Activity.resolution_date == None, 1))).label("pending"),
+            func.count(case((Activity.resolution_date != None, 1))).label("completed")
+        ).filter(Activity.users_id == user_id).first()
+
+        return jsonify({
+            "total": stats.total,
+            "pending": stats.pending,
+            "completed": stats.completed
+        }), 200        
     except Exception as e:
         # Retorna o erro detalhado
         return jsonify({'error': f'Erro interno do servidor: {str(e)}'}), 500

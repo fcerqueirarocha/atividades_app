@@ -31,93 +31,113 @@ let changesMade = false; // Indica se há alterações pendentes para salvar
 
 // Funções de exibição de página
 function showLogin() {
-    loginPage.classList.remove("hidden");
-    registerPage.classList.add("hidden");
-    mainPage.classList.add("hidden");
     clearAlerts();
 }
 
 function showRegister() {
-    loginPage.classList.add("hidden");
-    registerPage.classList.remove("hidden");
-    mainPage.classList.add("hidden");
     clearAlerts();
 }
 
 function showMainPage() {
-    loginPage.classList.add("hidden");
-    registerPage.classList.add("hidden");
-    mainPage.classList.remove("hidden");
     clearAlerts();
     loadActivities();
     updateUserWelcome();
 }
 
+
 function clearAlerts() {
-    loginAlert.innerHTML = "";
-    registerAlert.innerHTML = "";
-    activityAlert.innerHTML = "";
+    const alertIds = ["login-alert", "register-alert"];
+    alertIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = "";
+    });
 }
 
 function showAlert(element, message, type) {
-    element.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+    if (element) {
+        element.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+    }
 }
 
 // Funções de Autenticação
 async function register(event) {
     event.preventDefault();
-    const name = document.getElementById("register-name").value;
-    const email = document.getElementById("register-email").value;
-    const password = document.getElementById("register-password").value;
 
-    try {
-        const response = await fetch(`${API_BASE}/register`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ full_name: name, email, password }),
-        });
+    const nameEl = document.getElementById("register-name");
+    const emailEl = document.getElementById("register-email");
+    const passwordEl = document.getElementById("register-password");
+    const registerAlert = document.getElementById("register-alert");
+    const registerForm = document.getElementById("register-form");
+    
+    console.log("LOG DA FUNCAO REGISTER: ", nameEl," : ", emailEl," : ", passwordEl," : ", registerAlert," : ", registerForm);
 
-        const data = await response.json();
-        if (response.ok) {
-            showAlert(registerAlert, data.message, "success");
-            registerForm.reset();
-            setTimeout(showLogin, 2000);
-        } else {
-            showAlert(registerAlert, data.message || "Erro ao registrar", "error");
+    if (nameEl && emailEl && passwordEl && registerAlert && registerForm) {
+        const name = nameEl.value;
+        const email = emailEl.value;
+        const password = passwordEl.value;
+
+        try {
+            
+            const response = await fetch(`${API_BASE}/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ full_name: name, email, password }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                showAlert(registerAlert, data.message || "Cadastro realizado com sucesso", "success");
+                registerForm.reset();
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 2000);
+            } else {
+                showAlert(registerAlert, data.message || "Erro ao registrar", "error");
+            }
+        } catch (error) {
+            showAlert(registerAlert, `Erro de conexão: ${error.message || error}`, "error");
         }
-    } catch (error) {
-        showAlert(registerAlert, `Erro de conexão: ${error.message || error}`, "error");
     }
 }
 
 async function login(event) {
     event.preventDefault();
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
 
-    try {
-        const response = await fetch(`${API_BASE}/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-        });
+    const emailEl = document.getElementById("login-email");
+    const passwordEl = document.getElementById("login-password");
+    const loginAlert = document.getElementById("login-alert");
+    const loginForm = document.getElementById("login-form");
 
-        const data = await response.json();
-        if (response.ok) {
-            localStorage.setItem("authToken", data.access_token);
-            localStorage.setItem("userName", data.user.full_name);
-            showAlert(loginAlert, data.message, "success");
-            loginForm.reset();
-            showMainPage();
-        } else {
-            showAlert(loginAlert, data.message || "Erro ao fazer login", "error");
+    if (emailEl && passwordEl && loginAlert && loginForm) {
+        const email = emailEl.value;
+        const password = passwordEl.value;
+
+        try {
+            const response = await fetch(`${API_BASE}/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                localStorage.setItem("authToken", data.access_token);
+                localStorage.setItem("userName", data.user.full_name);
+                showAlert(loginAlert, "Login realizado com sucesso", "success");
+                loginForm.reset();
+                setTimeout(() => {
+                    window.location.href = "atividades.html";
+                }, 1000);
+            } else {
+                showAlert(loginAlert, data.message || "Erro ao fazer login", "error");
+            }
+        } catch (error) {
+            showAlert(loginAlert, `Erro de conexão: ${error.message || error}`, "error");
         }
-    } catch (error) {
-        showAlert(loginAlert, `Erro de conexão: ${error.message || error}`, "error");
     }
 }
 
@@ -125,6 +145,7 @@ function logout() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("userName");
     showLogin();
+    window.location.href = "login.html";
 }
 
 function getAuthToken() {
@@ -168,7 +189,8 @@ async function loadActivities() {
         if (response.ok) {
             activities = data.activities; // Armazena as atividades carregadas
             renderActivities();
-            updateStats();
+            //updateStats();
+            loadStats();
         } else {
             showAlert(activityAlert, data.message || "Erro ao carregar atividades", "error");
         }
@@ -376,22 +398,36 @@ function toggleActivityView() {
     loadActivities();
 }
 
-function updateStats() {
-    const total = activities.length;
-    const pending = activities.filter(a => !a.resolution_date).length;
-    const completed = total - pending;
-
-    totalActivitiesSpan.textContent = total;
-    pendingActivitiesSpan.textContent = pending;
-    completedActivitiesSpan.textContent = completed;
-}
-
 function updateUserWelcome() {
     const userName = localStorage.getItem("userName");
     if (userName) {
         userWelcome.textContent = `Bem-vindo(a), ${userName}!`;
     } else {
         userWelcome.textContent = "Bem-vindo ao seu sistema de gerenciamento de tarefas";
+    }
+}
+
+async function loadStats() {
+    const token = getAuthToken();
+
+    try {
+        console.log("Enviando token:", token);
+        const response = await fetch(`${API_BASE}/stats`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) throw new Error("Erro ao carregar estatísticas");
+
+        const stats = await response.json();
+
+        document.getElementById("total-activities").textContent = stats.total;
+        document.getElementById("pending-activities").textContent = stats.pending;
+        document.getElementById("completed-activities").textContent = stats.completed;
+
+    } catch (err) {
+        console.error("Erro ao buscar estatísticas:", err);
     }
 }
 
@@ -404,6 +440,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-loginForm.addEventListener("submit", login);
-registerForm.addEventListener("submit", register);
-newActivityForm.addEventListener("submit", addActivity);
+if (loginForm) {
+    loginForm.addEventListener("submit", login);
+    console.log("Login form found and event listener added");
+}else {
+    console.error("Login form not found");
+}
+if (registerForm) {
+    registerForm.addEventListener("submit", register);
+    console.log("Register form found and event listener added");
+}
+else {
+    console.error("Register form not found");
+}
+
+if (newActivityForm) {
+    newActivityForm.addEventListener("submit", addActivity);
+    console.log("New activity form found and event listener added");
+}
+else {
+    console.error("New activity form not found");
+}

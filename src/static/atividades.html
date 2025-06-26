@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Atividades</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="main-page">
+        <button class="logout-btn" onclick="logout()">Sair</button>
+        <div class="container">
+            <div class="header">
+                <h1>Minhas Atividades</h1>
+                <p id="user-welcome">Bem-vindo ao seu sistema de gerenciamento de tarefas</p>
+            </div>
+            <!-- Estatísticas -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-activities">0</div>
+                    <div class="stat-label">Total de Atividades</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pending-activities">0</div>
+                    <div class="stat-label">Atividades Pendentes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completed-activities">0</div>
+                    <div class="stat-label">Atividades Concluídas</div>
+                </div>
+            </div>
+            <!-- Nova Atividade -->
+            <div class="card">
+                <h2>Nova Atividade</h2>
+                <div id="activity-alert"></div>
+                <form id="new-activity-form">
+                    <div class="form-group">
+                        <label for="activity-description">Descrição:</label>
+                        <input id="activity-description" placeholder="Digite a descrição da atividade..." required=""
+                            type="text" />
+                    </div>
+                    <button class="btn" type="submit">Adicionar Atividade</button>
+                </form>
+            </div>
+            <!-- Lista de Atividades -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Lista de Atividades</h2>
+                    <button class="btn btn-success hidden" id="save-changes-btn" onclick="saveChanges()">Salvar
+                        Alterações</button>
+                </div>
+                <div class="toggle-container">
+                    <label class="toggle">
+                        <input checked="" id="pending-toggle" onchange="toggleActivityView()" type="checkbox" />
+                        <span class="slider"></span>
+                    </label>
+                    <label for="pending-toggle" style="font-weight: 600; cursor: pointer;">
+                        <span id="toggle-label">Mostrar Pendentes</span>
+                    </label>
+                </div>
+                <div class="loading hidden" id="activities-loading">Carregando atividades...</div>
+                <div id="activities-container"></div>
+                <div class="hidden" id="no-activities" style="text-align: center; padding: 40px; color: #666;">
+                    <p>Nenhuma atividade encontrada.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

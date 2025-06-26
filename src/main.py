@@ -71,10 +71,10 @@ def create_app():
         print(f"Erro interno do servidor: {error}" , file=sys.stderr)
         return jsonify({"message": "Erro interno do servidor"}), 500
 
-    # Rota para servir o index.html na raiz
+    # Rota para servir o login.html na raiz
     @app.route("/")
     def serve_index():
-        return send_from_directory(app.static_folder, "index.html")
+        return send_from_directory(app.static_folder, "login.html")
 
     # Criar tabelas automaticamente no banco de dados
     with app.app_context():
