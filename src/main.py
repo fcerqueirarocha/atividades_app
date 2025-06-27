@@ -27,7 +27,7 @@ def create_app():
     cors.init_app(app)
 
     # Importar modelos e rotas após a inicialização do db
-    from src.models.user import User, Activity
+    from src.models import User, Activity
     from src.routes.user import user_bp
     from src.routes.activity import activity_bp
 

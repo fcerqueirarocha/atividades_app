@@ -1,8 +1,11 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from src.models.user import Activity, db
 from datetime import datetime
 from sqlalchemy import func, case
+from src.models import Activity
+from src.extensions import db
+
+
 
 
 activity_bp = Blueprint('activity', __name__)
