@@ -74,12 +74,24 @@ def create_activity():
             return jsonify({'error': 'Dados não fornecidos'}), 400
         
         description = data.get('description', '').strip()
+        expected_date_str = data.get('expected_date')
+
         if not description:
             return jsonify({'error': 'Descrição é obrigatória'}), 400
         
+        expected_date = None
+        if expected_date_str:
+            try:
+                expected_date = datetime.strptime(expected_date_str, "%d/%m/%Y")
+                if expected_date.date() < datetime.utcnow().date():
+                    return jsonify({'error': 'A data de previsão não pode ser anterior à data atual'}), 400
+            except ValueError:
+                return jsonify({'error': 'Formato de data inválido. Use DD/MM/AAAA'}), 400
+
         activity = Activity(
             description=description,
-            users_id=user_id
+            users_id=user_id,
+            expected_date=expected_date
         )
         
         db.session.add(activity)

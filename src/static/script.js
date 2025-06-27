@@ -219,6 +219,7 @@ function renderActivities() {
         activityItem.innerHTML = `
             <input type="checkbox" class="activity-checkbox" data-id="${activity.id}" ${activity.resolution_date ? "checked" : ""}>
             <span class="activity-description">${activity.description}</span>
+            <span class="activity-date">${activity.expected_date ? `Prevista para: ${dayjs(activity.expected_date).format("DD/MM/YYYY")}` : "Sem data prevista"}</span>
             <span class="activity-date">${activity.resolution_date ? `Concluída em: ${new Date(activity.resolution_date).toLocaleString()}` : `Pendente desde: ${new Date(activity.created_at).toLocaleString()}`}</span>
             <div class="activity-actions">
                 <button class="btn btn-danger btn-small" onclick="deleteActivity(\'${activity.id}\')">Excluir</button>
@@ -263,6 +264,31 @@ async function addActivity(event) {
         return;
     }
 
+    const expectedDateInput = document.getElementById("expected-date");
+    let expected_date = expectedDateInput.value;
+
+    if (expected_date) {
+        console.log("Expected date: ", expected_date);
+        //const selectedDate = new Date(expected_date);
+        const selectedDate = dayjs(expected_date, "YYYY-MM-DD").toDate();
+        console.log("selectedDate: ", selectedDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        console.log("Selected date:", selectedDate, "Today:", today);
+
+        if (selectedDate < today) {
+            showAlert(activityAlert, "A data de previsão não pode ser anterior à data atual.", "error");
+            return;
+        }
+
+        // Converter para DD/MM/YYYY
+        const day = String(selectedDate.getDate()).padStart(2, '0');
+        const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+        const year = selectedDate.getFullYear();
+        expected_date = `${day}/${month}/${year}`;
+    }
+
     try {
         const response = await fetch(`${API_BASE}/activities`, {
             method: "POST",
@@ -270,7 +296,7 @@ async function addActivity(event) {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`,
             },
-            body: JSON.stringify({ description }),
+            body: JSON.stringify({ description, expected_date }),
         });
 
         if (response.status === 401) {
