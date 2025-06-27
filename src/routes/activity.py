@@ -4,8 +4,7 @@ from datetime import datetime
 from sqlalchemy import func, case
 from src.models import Activity
 from src.extensions import db
-
-
+from datetime import datetime
 
 
 activity_bp = Blueprint('activity', __name__)
@@ -110,38 +109,47 @@ def create_activity():
         # Retorna o erro detalhado
         return jsonify({'error': f'Erro ao criar atividade: {str(e)}'}), 500
 
+
 @activity_bp.route('/activities/<activity_id>', methods=['PUT'])
 @jwt_required()
 def update_activity(activity_id):
-    """Atualizar atividade (descrição)"""
+    """Atualizar atividade (descrição e/ou data prevista)"""
     try:
         user_id = int(get_jwt_identity())
         activity = Activity.query.filter_by(id=activity_id, users_id=user_id).first()
-        
+
         if not activity:
             return jsonify({'error': 'Atividade não encontrada'}), 404
-        
+
         data = request.get_json()
         if not data:
             return jsonify({'error': 'Dados não fornecidos'}), 400
-        
+
         if 'description' in data:
             description = data['description'].strip()
             if not description:
                 return jsonify({'error': 'Descrição não pode estar vazia'}), 400
             activity.description = description
-        
+
+        if 'expected_date' in data:
+            expected_date_str = data['expected_date'].strip()
+            if expected_date_str:
+                try:
+                    activity.expected_date = datetime.strptime(expected_date_str, "%d/%m/%Y")
+                except ValueError:
+                    return jsonify({'error': 'Formato de data inválido (esperado: DD/MM/YYYY)'}), 400
+            else:
+                activity.expected_date = None
+
         activity.updated_at = datetime.utcnow()
         db.session.commit()
-        
+
         return jsonify({
             'message': 'Atividade atualizada com sucesso',
             'activity': activity.to_dict()
         }), 200
-        
     except Exception as e:
         db.session.rollback()
-        # Retorna o erro detalhado
         return jsonify({'error': f'Erro ao atualizar atividade: {str(e)}'}), 500
 
 @activity_bp.route('/activities/<activity_id>/toggle', methods=['PUT'])

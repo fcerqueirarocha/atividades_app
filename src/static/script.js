@@ -29,6 +29,9 @@ const userWelcome = document.getElementById("user-welcome");
 let activities = []; // Armazena as atividades carregadas
 let changesMade = false; // Indica se há alterações pendentes para salvar
 
+let isEditing = false;
+let currentEditId = null;
+
 // Funções de exibição de página
 function showLogin() {
     clearAlerts();
@@ -200,6 +203,19 @@ async function loadActivities() {
         activitiesLoading.classList.add("hidden");
     }
 }
+function editActivity(id) {
+    const activity = activities.find(a => a.id === id);
+    if (!activity) return;
+
+    document.getElementById("activity-description").value = activity.description;
+    document.getElementById("expected-date").value = activity.expected_date
+        ? dayjs(activity.expected_date).format("YYYY-MM-DD")
+        : "";
+
+    document.getElementById("submit-btn").textContent = "Atualizar Atividade";
+    isEditing = true;
+    currentEditId = id;
+}
 
 function renderActivities() {
     activitiesContainer.innerHTML = "";
@@ -222,7 +238,8 @@ function renderActivities() {
             <span class="activity-date">${activity.expected_date ? `Prevista para: ${dayjs(activity.expected_date).format("DD/MM/YYYY")}` : "Sem data prevista"}</span>
             <span class="activity-date">${activity.resolution_date ? `Concluída em: ${new Date(activity.resolution_date).toLocaleString()}` : `Pendente desde: ${new Date(activity.created_at).toLocaleString()}`}</span>
             <div class="activity-actions">
-                <button class="btn btn-danger btn-small" onclick="deleteActivity(\'${activity.id}\')">Excluir</button>
+                <button class="btn btn-primary btn-small" onclick="editActivity('${activity.id}')">✏️</button>
+                <button class="btn btn-primary btn-small" onclick="deleteActivity('${activity.id}')" title="Excluir atividade">🗑️</button>
             </div>
         `;
         activitiesContainer.appendChild(activityItem);
@@ -253,9 +270,11 @@ function renderActivities() {
     });
 }
 
-async function addActivity(event) {
+async function handleActivityForm(event) {
     event.preventDefault();
     const description = document.getElementById("activity-description").value;
+    const expectedDateInput = document.getElementById("expected-date");
+    let expected_date = expectedDateInput.value;
 
     const token = getAuthToken();
     if (!token) {
@@ -264,54 +283,49 @@ async function addActivity(event) {
         return;
     }
 
-    const expectedDateInput = document.getElementById("expected-date");
-    let expected_date = expectedDateInput.value;
-
     if (expected_date) {
-        console.log("Expected date: ", expected_date);
-        //const selectedDate = new Date(expected_date);
         const selectedDate = dayjs(expected_date, "YYYY-MM-DD").toDate();
-        console.log("selectedDate: ", selectedDate);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        
-        console.log("Selected date:", selectedDate, "Today:", today);
 
         if (selectedDate < today) {
             showAlert(activityAlert, "A data de previsão não pode ser anterior à data atual.", "error");
             return;
         }
 
-        // Converter para DD/MM/YYYY
-        const day = String(selectedDate.getDate()).padStart(2, '0');
-        const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-        const year = selectedDate.getFullYear();
-        expected_date = `${day}/${month}/${year}`;
+        expected_date = `${selectedDate.getDate().toString().padStart(2, '0')}/${
+            (selectedDate.getMonth() + 1).toString().padStart(2, '0')}/${
+            selectedDate.getFullYear()}`;
     }
 
+    const payload = { description, expected_date };
+
     try {
-        const response = await fetch(`${API_BASE}/activities`, {
-            method: "POST",
+        const url = isEditing
+            ? `${API_BASE}/activities/${currentEditId}`
+            : `${API_BASE}/activities`;
+        const method = isEditing ? "PUT" : "POST";
+
+        const response = await fetch(url, {
+            method,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`,
             },
-            body: JSON.stringify({ description, expected_date }),
+            body: JSON.stringify(payload),
         });
 
-        if (response.status === 401) {
-            showAlert(activityAlert, "Sessão expirada ou token inválido. Faça login novamente.", "error");
-            logout();
-            return;
-        }
-
         const data = await response.json();
+
         if (response.ok) {
             showAlert(activityAlert, data.message, "success");
             newActivityForm.reset();
-            loadActivities(); // Recarrega a lista de atividades
+            loadActivities();
+            document.getElementById("submit-btn").textContent = "Adicionar Atividade";
+            isEditing = false;
+            currentEditId = null;
         } else {
-            showAlert(activityAlert, data.message || "Erro ao criar atividade", "error");
+            showAlert(activityAlert, data.message || "Erro ao salvar atividade", "error");
         }
     } catch (error) {
         showAlert(activityAlert, `Erro de conexão: ${error.message || error}`, "error");
@@ -468,22 +482,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 if (loginForm) {
     loginForm.addEventListener("submit", login);
-    console.log("Login form found and event listener added");
-}else {
-    console.error("Login form not found");
 }
+
 if (registerForm) {
     registerForm.addEventListener("submit", register);
-    console.log("Register form found and event listener added");
-}
-else {
-    console.error("Register form not found");
 }
 
 if (newActivityForm) {
-    newActivityForm.addEventListener("submit", addActivity);
-    console.log("New activity form found and event listener added");
-}
-else {
-    console.error("New activity form not found");
+    newActivityForm.addEventListener("submit", handleActivityForm);
 }
