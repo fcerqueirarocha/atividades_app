@@ -526,7 +526,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-
+ 
     const sortSelect = document.getElementById("sort-select");
     const sortDirection = document.getElementById("sort-direction");
 
