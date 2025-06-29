@@ -516,29 +516,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    //const passwordInput = document.getElementById("login-password");
-    /*if (passwordInput) {
-        // Cria o botão do olho
-        const eyeBtn = document.createElement("span");
-        eyeBtn.textContent = "👁️";
-        eyeBtn.style.cursor = "pointer";
-        eyeBtn.style.position = "absolute";
-        eyeBtn.style.right = "10px";
-        eyeBtn.style.top = "50%";
-        eyeBtn.style.transform = "translateY(-50%)";
-        eyeBtn.id = "toggle-password";
-
-        // Encontra o form-group da senha e posiciona o olho
-        const formGroup = passwordInput.parentElement;
-        formGroup.style.position = "relative";
-        formGroup.appendChild(eyeBtn);
-
-        eyeBtn.addEventListener("click", function() {
-            const type = passwordInput.type === "password" ? "text" : "password";
-            passwordInput.type = type;
-            eyeBtn.textContent = type === "password" ? "👁️" : "🙈";
-        });
-    }*/
     const passwordInput = document.getElementById("login-password");
     const eyeBtn = document.getElementById("toggle-password");
     if (passwordInput && eyeBtn) {
