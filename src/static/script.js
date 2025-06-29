@@ -288,9 +288,7 @@ function sortActivities(criteria, direction = "asc") {
         } else if (criteria === "created_at") {
             if (!a.created_at) return 1;
             if (!b.created_at) return -1;
-            //dateA = parseDateBR(a.created_at);
-            //dateB = parseDateBR(b.created_at);
-            dateA = new Date(a.created_at); // CORRIGIDO AQUI
+            dateA = new Date(a.created_at); 
             dateB = new Date(b.created_at);
         } else {
             return 0;
@@ -518,8 +516,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    const passwordInput = document.getElementById("login-password");
-    if (passwordInput) {
+    //const passwordInput = document.getElementById("login-password");
+    /*if (passwordInput) {
         // Cria o botão do olho
         const eyeBtn = document.createElement("span");
         eyeBtn.textContent = "👁️";
@@ -540,7 +538,17 @@ document.addEventListener("DOMContentLoaded", function() {
             passwordInput.type = type;
             eyeBtn.textContent = type === "password" ? "👁️" : "🙈";
         });
+    }*/
+    const passwordInput = document.getElementById("login-password");
+    const eyeBtn = document.getElementById("toggle-password");
+    if (passwordInput && eyeBtn) {
+        eyeBtn.addEventListener("click", function() {
+            const type = passwordInput.type === "password" ? "text" : "password";
+            passwordInput.type = type;
+            eyeBtn.textContent = type === "password" ? "👁️" : "🙈";
+        });
     }
+
 
     const sortSelect = document.getElementById("sort-select");
     const sortDirection = document.getElementById("sort-direction");
