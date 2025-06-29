@@ -270,6 +270,43 @@ function renderActivities() {
     });
 }
 
+function parseDateBR(dateStr) {
+    // Converte "DD/MM/YYYY" para "YYYY-MM-DD"
+    if (!dateStr) return null;
+    const [day, month, year] = dateStr.split("/");
+    return new Date(`${year}-${month}-${day}`);
+}
+
+function sortActivities(criteria, direction = "asc") {
+    activities.sort((a, b) => {
+        let dateA, dateB;
+        if (criteria === "expected_date") {
+            if (!a.expected_date) return 1;
+            if (!b.expected_date) return -1;
+            dateA = new Date(a.expected_date);
+            dateB = new Date(b.expected_date);
+        } else if (criteria === "created_at") {
+            if (!a.created_at) return 1;
+            if (!b.created_at) return -1;
+            //dateA = parseDateBR(a.created_at);
+            //dateB = parseDateBR(b.created_at);
+            dateA = new Date(a.created_at); // CORRIGIDO AQUI
+            dateB = new Date(b.created_at);
+        } else {
+            return 0;
+        }
+
+        console.log("dateA: ", dateA, "|", "dateB: ", dateB, "|", "criteria: ", criteria, "|", "direction: ", direction);
+
+        if (direction === "asc") {
+            return dateA - dateB;
+        } else {
+            return dateB - dateA;
+        }
+    });
+    renderActivities();
+}
+
 async function handleActivityForm(event) {
     event.preventDefault();
     const description = document.getElementById("activity-description").value;
@@ -451,7 +488,6 @@ async function loadStats() {
     const token = getAuthToken();
 
     try {
-        console.log("Enviando token:", token);
         const response = await fetch(`${API_BASE}/stats`, {
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -479,6 +515,49 @@ document.addEventListener("DOMContentLoaded", () => {
         showLogin();
     }
 });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const passwordInput = document.getElementById("login-password");
+    if (passwordInput) {
+        // Cria o botão do olho
+        const eyeBtn = document.createElement("span");
+        eyeBtn.textContent = "👁️";
+        eyeBtn.style.cursor = "pointer";
+        eyeBtn.style.position = "absolute";
+        eyeBtn.style.right = "10px";
+        eyeBtn.style.top = "50%";
+        eyeBtn.style.transform = "translateY(-50%)";
+        eyeBtn.id = "toggle-password";
+
+        // Encontra o form-group da senha e posiciona o olho
+        const formGroup = passwordInput.parentElement;
+        formGroup.style.position = "relative";
+        formGroup.appendChild(eyeBtn);
+
+        eyeBtn.addEventListener("click", function() {
+            const type = passwordInput.type === "password" ? "text" : "password";
+            passwordInput.type = type;
+            eyeBtn.textContent = type === "password" ? "👁️" : "🙈";
+        });
+    }
+
+    const sortSelect = document.getElementById("sort-select");
+    const sortDirection = document.getElementById("sort-direction");
+
+    function applySort() {
+        const criteria = sortSelect ? sortSelect.value : "expected_date";
+        const direction = sortDirection ? sortDirection.value : "asc";
+        sortActivities(criteria, direction);
+    }
+
+    if (sortSelect) sortSelect.addEventListener("change", applySort);
+    if (sortDirection) sortDirection.addEventListener("change", applySort);
+
+    // Ordena inicialmente pelo critério e direção selecionados
+    applySort();
+});
+
 
 if (loginForm) {
     loginForm.addEventListener("submit", login);

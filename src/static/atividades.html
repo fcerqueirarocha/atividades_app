@@ -55,6 +55,18 @@
                     <button class="btn btn-success hidden" id="save-changes-btn" onclick="saveChanges()">Salvar
                         Alterações</button>
                 </div>
+                <div class="sort-container" style="margin-bottom: 16px;">
+                    <label for="sort-select">Ordenar por:</label>
+                    <select id="sort-select">
+                        <option value="expected_date">Data de Previsão</option>
+                        <option value="created_at">Data de Criação</option>
+                        <!-- Futuras opções podem ser adicionadas aqui -->
+                    </select>
+                    <select id="sort-direction" style="margin-left: 8px;">
+                        <option value="asc">Crescente</option>
+                        <option value="desc">Decrescente</option>
+                    </select>
+                </div>
                 <div class="toggle-container">
                     <label class="toggle">
                         <input checked="" id="pending-toggle" onchange="toggleActivityView()" type="checkbox" />
