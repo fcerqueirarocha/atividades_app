@@ -242,6 +242,9 @@ function renderActivities() {
                 <button class="btn btn-primary btn-small" onclick="deleteActivity('${activity.id}')" title="Excluir atividade">🗑️</button>
             </div>
         `;
+        if (activity.expected_date) {
+            setActivityColor(activityItem, activity.expected_date);
+        }
         activitiesContainer.appendChild(activityItem);
     });
 
@@ -505,6 +508,34 @@ async function loadStats() {
     }
 }
 
+function setActivityColor(activityElement, expectedDateStr) {
+    // expectedDateStr no formato "DD/MM/YYYY" ou "YYYY-MM-DD"
+    let expectedDate;
+    if (expectedDateStr.includes('/')) {
+        // Formato brasileiro
+        const [day, month, year] = expectedDateStr.split('/');
+        expectedDate = new Date(`${year}-${month}-${day}`);
+    } else {
+        // Formato ISO
+        expectedDate = new Date(expectedDateStr);
+    }
+
+    // Zera horas para comparar apenas datas
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    expectedDate.setHours(0,0,0,0);
+
+    if (expectedDate.getTime() === today.getTime()) {
+        // Data de previsão é hoje
+        activityElement.style.backgroundColor = "#fff3cd"; // amarelo claro
+    } else if (expectedDate < today) {
+        // Data de previsão já passou
+        activityElement.style.backgroundColor = "#f8d7da"; // vermelho claro
+    } else {
+        // Futuro
+        activityElement.style.backgroundColor = ""; // cor padrão
+    }
+}
 // Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
     if (getAuthToken()) {
