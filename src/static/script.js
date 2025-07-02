@@ -35,14 +35,23 @@ let currentEditId = null;
 // Funções de exibição de página
 function showLogin() {
     clearAlerts();
+    if (loginPage) loginPage.style.display = "block";
+    if (mainPage) mainPage.style.display = "none";
+    if (registerPage) registerPage.style.display = "none";
 }
 
 function showRegister() {
     clearAlerts();
+    if (registerPage) registerPage.style.display = "block";
+    if (loginPage) loginPage.style.display = "none";
+    if (mainPage) mainPage.style.display = "none";
 }
 
 function showMainPage() {
     clearAlerts();
+    if (mainPage) mainPage.style.display = "block";
+    if (loginPage) loginPage.style.display = "none";
+    if (registerPage) registerPage.style.display = "none";
     loadActivities();
     updateUserWelcome();
 }
@@ -112,10 +121,13 @@ async function login(event) {
     const passwordEl = document.getElementById("login-password");
     const loginAlert = document.getElementById("login-alert");
     const loginForm = document.getElementById("login-form");
+    const loginLoading = document.getElementById("login-loading");
 
     if (emailEl && passwordEl && loginAlert && loginForm) {
         const email = emailEl.value;
         const password = passwordEl.value;
+                
+        if (loginLoading) loginLoading.classList.remove("hidden");
 
         try {
             const response = await fetch(`${API_BASE}/login`, {
@@ -140,6 +152,8 @@ async function login(event) {
             }
         } catch (error) {
             showAlert(loginAlert, `Erro de conexão: ${error.message || error}`, "error");
+        } finally {
+            if (loginLoading) loginLoading.classList.add("hidden"); // ESCONDE O LOADING
         }
     }
 }
@@ -218,6 +232,8 @@ function editActivity(id) {
 }
 
 function renderActivities() {
+    if (!activitiesContainer || !noActivitiesMessage) return;
+
     activitiesContainer.innerHTML = "";
     if (activities.length === 0) {
         noActivitiesMessage.classList.remove("hidden");

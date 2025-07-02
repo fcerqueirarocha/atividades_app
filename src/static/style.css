@@ -211,9 +211,9 @@ input:checked + .slider:before {
     margin-left: 15px;
 }
 
-.hidden {
+/*.hidden {
     display: none;
-}
+}*/
 
 .alert {
     padding: 15px;
@@ -232,12 +232,6 @@ input:checked + .slider:before {
     background: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
-}
-
-.loading {
-    text-align: center;
-    padding: 20px;
-    color: #666;
 }
 
 .stats {
@@ -285,7 +279,6 @@ input:checked + .slider:before {
     position: absolute;
     top: 10px;
     right: 20px;
-    
     background: rgba(255,255,255,0.2);
     color: white;
     border: 1px solid rgba(255,255,255,0.3);
@@ -297,6 +290,21 @@ input:checked + .slider:before {
 
 .logout-btn:hover {
     background: rgba(255,255,255,0.3);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    font-size: 1.1em;
+    margin-bottom: 16px;
+    text-align: center;
+    padding: 20px;
+    /*color: #666;*/
+}
+.hidden {
+    display: none !important;
 }
 
 @media (max-width: 768px) {
@@ -354,4 +362,36 @@ input:checked + .slider:before {
     .header p {
         font-size: 1rem;
     }
+    .logout-btn {
+        top: 10px;
+        left: 10px;
+        right: auto;
+    }
+}
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30, 30, 30, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 6px solid #fff;
+    border-top: 6px solid #764ba2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 8px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
