@@ -619,3 +619,48 @@ if (registerForm) {
 if (newActivityForm) {
     newActivityForm.addEventListener("submit", handleActivityForm);
 }
+
+// Reconhecimento de voz para descrição da atividade
+const micBtn = document.getElementById("mic-btn");
+const activityDescriptionInput = document.getElementById("activity-description");
+
+// Detecta suporte à API de voz
+const isSpeechRecognitionSupported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
+if (micBtn) {
+    if (!isSpeechRecognitionSupported) {
+        // Esconde ou desabilita o botão se não houver suporte
+        micBtn.style.display = "none";
+        // Ou, se preferir, apenas desabilite:
+        // micBtn.disabled = true;
+        // micBtn.title = "Reconhecimento de voz não suportado neste navegador";
+    } else if (activityDescriptionInput) {
+        // Configuração do reconhecimento de voz
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = "pt-BR";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        micBtn.addEventListener("click", () => {
+            micBtn.disabled = true;
+            micBtn.textContent = "🎙️";
+            recognition.start();
+        });
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            activityDescriptionInput.value = transcript;
+        };
+
+        recognition.onend = () => {
+            micBtn.disabled = false;
+            micBtn.textContent = "🎤";
+        };
+
+        recognition.onerror = (event) => {
+            alert("Erro ao captar voz: " + event.error);
+            micBtn.disabled = false;
+            micBtn.textContent = "🎤";
+        };
+    }
+}

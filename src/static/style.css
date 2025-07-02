@@ -55,6 +55,7 @@ body {
 
 .form-group {
     margin-bottom: 20px;
+    position: relative;
 }
 
 .form-group label {
@@ -394,4 +395,23 @@ input:checked + .slider:before {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+#mic-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+#mic-btn:disabled {
+    color: #aaa;
+}
+
+#activity-description {
+    padding-right: 40px; /* Espaço para o botão */
 }
