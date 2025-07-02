@@ -553,9 +553,26 @@ function setActivityColor(activityElement, expectedDateStr) {
     }
 }
 // Event Listeners
-document.addEventListener("DOMContentLoaded", () => {
-    if (getAuthToken()) {
-        showMainPage();
+document.addEventListener("DOMContentLoaded", async () => {
+    const token = getAuthToken();
+    if (token) {
+        // Valida o token antes de mostrar a mainPage
+        try {
+            const response = await fetch(`${API_BASE}/stats`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            if (response.ok) {
+                showMainPage();
+            } else {
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("userName");
+                showLogin();
+            }
+        } catch {
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("userName");
+            showLogin();
+        }
     } else {
         showLogin();
     }
