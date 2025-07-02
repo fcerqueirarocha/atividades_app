@@ -283,15 +283,16 @@ input:checked + .slider:before {
 
 .logout-btn {
     position: absolute;
-    top: 20px;
+    top: 10px;
     right: 20px;
+    
     background: rgba(255,255,255,0.2);
     color: white;
     border: 1px solid rgba(255,255,255,0.3);
     padding: 8px 15px;
     border-radius: 5px;
     cursor: pointer;
-    /*transition: all 0.3s ease;*/
+    transition: all 0.3s ease;
 }
 
 .logout-btn:hover {
@@ -323,5 +324,34 @@ input:checked + .slider:before {
     
     .stats {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .container, .card, .auth-container {
+        max-width: 100%;
+        padding: 5px;
+    }
+    .form-group input,
+    .form-group label,
+    .btn,
+    select {
+        width: 100%;
+        font-size: 1em;
+    }
+    .activity-date {
+        margin-left: 0;
+        margin-top: 5px;
+    }
+    .activity-actions {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+    .header h1 {
+        font-size: 1.3rem;
+    }
+    .header p {
+        font-size: 1rem;
     }
 }

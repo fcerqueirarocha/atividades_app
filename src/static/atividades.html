@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Atividades</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
@@ -10,7 +11,9 @@
 
 <body>
     <div id="main-page">
-        <button class="logout-btn" onclick="logout()">Sair</button>
+        <div class="activity-actions">
+            <button class="logout-btn" onclick="logout()">Sair</button>
+        </div>
         <div class="container">
             <div class="header">
                 <h1>Minhas Atividades</h1>
@@ -61,8 +64,8 @@
                         <option value="expected_date">Data de Previsão</option>
                         <option value="created_at">Data de Criação</option>
                         <!-- Futuras opções podem ser adicionadas aqui -->
-                    </select>
-                    <select id="sort-direction" style="margin-left: 8px;">
+                    </select> 
+                    <select id="sort-direction" >
                         <option value="asc">Crescente</option>
                         <option value="desc">Decrescente</option>
                     </select>
