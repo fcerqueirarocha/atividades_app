@@ -1,10 +1,22 @@
 //utilitários, autenticação, helpers usados em várias páginas
 export const API_BASE = window.location.origin + "/api";
-console.log("common.js loaded", API_BASE);
 
-export function showAlert(element, message, type) {
+export function showAlert(element, message, type, autoHide = true) {
     if (element) {
         element.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+    }
+    // Auto-hide para mensagens de sucesso
+    console.log("autoHide: ", type === "success");
+    if (autoHide && type === "success") {
+        setTimeout(() => {
+            const alertDiv = element.querySelector('.alert');
+            if (alertDiv) {
+                alertDiv.classList.add('fade-out');
+                setTimeout(() => {
+                    element.innerHTML = '';
+                }, 500); // Espera a animação terminar
+            }
+        }, 2000); // Começa a desaparecer após 3 segundos
     }
 }
 
