@@ -336,7 +336,7 @@ input:checked + .slider:before {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #333;
+    color: #FBB24B;
     font-size: 1.1em;
     margin-bottom: 16px;
     text-align: center;
@@ -440,7 +440,7 @@ input:checked + .slider:before {
     width: 48px;
     height: 48px;
     border: 6px solid #fff;
-    border-top: 6px solid #764ba2;
+    border-top: 6px solid #FBB24B;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 8px;
