@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -33,8 +34,8 @@
                 <div class="form-group">
                     <label for="login-password">Senha:</label>
                         <div style="position: relative;">
-                        <input id="login-password" required="" type="password" style="padding-right: 40px;" />
-                        <span id="toggle-password" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">👁️</span>
+                            <input id="login-password" required="" type="password" style="padding-right: 40px;" />
+                            <i id="toggle-password" class="fas fa-eye password-toggle-icon"></i>
                     </div>
                 </div>
                 <button class="btn" style="width: 100%;" type="submit">Entrar</button>

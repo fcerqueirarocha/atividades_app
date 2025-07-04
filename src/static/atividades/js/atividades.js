@@ -67,8 +67,12 @@ function renderActivities() {
             <span class="activity-date">${activity.expected_date ? `Prevista para: ${dayjs(activity.expected_date).format("DD/MM/YYYY")}` : "Sem data prevista"}</span>
             <span class="activity-date">${activity.resolution_date ? `Concluída em: ${new Date(activity.resolution_date).toLocaleString()}` : `Pendente desde: ${new Date(activity.created_at).toLocaleString()}`}</span>
             <div class="activity-actions">
-                <button class="btn btn-primary btn-small" onclick="editActivity('${activity.id}')">✏️</button>
-                <button class="btn btn-primary btn-small" onclick="deleteActivity('${activity.id}')" title="Excluir atividade">🗑️</button>
+                <button class="btn btn-edit" onclick="editActivity('${activity.id}')" title="Editar atividade">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-delete" onclick="deleteActivity('${activity.id}')" title="Excluir atividade">
+                    <i class="fas fa-trash"></i>
+                </button>
             </div>
         `;
         if (activity.expected_date) {
@@ -361,7 +365,9 @@ if (micBtn) {
 
         micBtn.addEventListener("click", () => {
             micBtn.disabled = true;
-            micBtn.textContent = "🎙️";
+            const micIcon = micBtn.querySelector('i');
+            micIcon.classList.remove('fa-microphone');
+            micIcon.classList.add('fa-microphone-slash');
             recognition.start();
         });
 
@@ -372,13 +378,17 @@ if (micBtn) {
 
         recognition.onend = () => {
             micBtn.disabled = false;
-            micBtn.textContent = "🎤";
+            const micIcon = micBtn.querySelector('i');
+            micIcon.classList.remove('fa-microphone-slash');
+            micIcon.classList.add('fa-microphone');
         };
 
         recognition.onerror = (event) => {
             alert("Erro ao captar voz: " + event.error);
             micBtn.disabled = false;
-            micBtn.textContent = "🎤";
+            const micIcon = micBtn.querySelector('i');
+            micIcon.classList.remove('fa-microphone-slash');
+            micIcon.classList.add('fa-microphone');
         };
     }
 }

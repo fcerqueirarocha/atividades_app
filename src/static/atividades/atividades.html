@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Atividades</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 </head>
 
@@ -39,12 +40,11 @@
                 <h2>Nova Atividade</h2>
                 <div id="activity-alert"></div>
                 <form id="new-activity-form">
-                    <div class="form-group">
+                    <div class="form-group" style="position: relative;">
                         <label for="activity-description">Descrição:</label>
                         <input id="activity-description" placeholder="Digite a descrição da atividade..." required="" type="text" style="padding-right: 40px;" />
-                        <button type="button" id="mic-btn" title="Falar descrição"
-                            style="position: absolute; right: 10px; top: 70%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.5em;">
-                            🎤
+                        <button type="button" id="mic-btn" title="Falar descrição" class="mic-button">
+                            <i class="fas fa-microphone"></i>
                         </button>
                     </div>
                     <div class="form-group">

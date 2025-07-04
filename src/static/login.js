@@ -69,7 +69,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         eyeBtn.addEventListener("click", function() {
             const type = passwordInput.type === "password" ? "text" : "password";
             passwordInput.type = type;
-            eyeBtn.textContent = type === "password" ? "👁️" : "🙈";
+            
+            // Alterna entre os ícones do Font Awesome
+            if (type === "password") {
+                eyeBtn.classList.remove("fa-eye-slash");
+                eyeBtn.classList.add("fa-eye");
+            } else {
+                eyeBtn.classList.remove("fa-eye");
+                eyeBtn.classList.add("fa-eye-slash");
+            }
         });
     }
 });
