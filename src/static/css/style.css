@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0077BD 0%, #0077BD 100%);
     min-height: 100vh;
     color: #333;
 }
@@ -18,6 +18,12 @@ body {
 }
 
 .header {
+    text-align: center;
+    color: #0077BD;
+    margin-bottom: 30px;
+}
+
+.header-atv {
     text-align: center;
     color: white;
     margin-bottom: 30px;
@@ -32,6 +38,33 @@ body {
 .header p {
     font-size: 1.1rem;
     opacity: 0.9;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+}
+
+.header-logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.header-text {
+    text-align: left;
+}
+
+.header-text h1 {
+    margin: 0;
+    font-size: 1.8em;
+}
+
+.header-text p {
+    margin: 4px 0 0 0;
+    font-size: 0.9em;
 }
 
 .card {
@@ -81,7 +114,7 @@ body {
 }
 
 .btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0077BD 50%, #0077BD 100%);
     color: white;
     border: none;
     padding: 12px 25px;
@@ -162,7 +195,7 @@ body {
 }
 
 input:checked + .slider {
-    background-color: #667eea;
+    background-color: #0077BD;
 }
 
 input:checked + .slider:before {
@@ -259,7 +292,7 @@ input:checked + .slider:before {
 .stat-number {
     font-size: 2rem;
     font-weight: bold;
-    color: #667eea;
+    color: #0077BD;
 }
 
 .stat-label {
@@ -374,7 +407,21 @@ input:checked + .slider:before {
         left: 10px;
         right: auto;
     }
+        .header-content {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .header-text {
+        text-align: center;
+    }
+    
+    .header-logo {
+        width: 50px;
+        height: 50px;
+    }
 }
+
 .loading-overlay {
     position: fixed;
     top: 0;
