@@ -125,21 +125,31 @@ def update_activity(activity_id):
         if not data:
             return jsonify({'error': 'Dados não fornecidos'}), 400
 
+        # Atualizar descrição
         if 'description' in data:
-            description = data['description'].strip()
+            description = data['description']
+            if description is None:
+                return jsonify({'error': 'Descrição não pode ser nula'}), 400
+            description = description.strip()
             if not description:
                 return jsonify({'error': 'Descrição não pode estar vazia'}), 400
             activity.description = description
 
+        # Atualizar data prevista
         if 'expected_date' in data:
-            expected_date_str = data['expected_date'].strip()
-            if expected_date_str:
-                try:
-                    activity.expected_date = datetime.strptime(expected_date_str, "%d/%m/%Y")
-                except ValueError:
-                    return jsonify({'error': 'Formato de data inválido (esperado: DD/MM/YYYY)'}), 400
-            else:
+            expected_date_str = data['expected_date']
+            if expected_date_str is None or expected_date_str == '':
+                # Se for None ou string vazia, limpar a data
                 activity.expected_date = None
+            else:
+                expected_date_str = expected_date_str.strip()
+                if expected_date_str:
+                    try:
+                        activity.expected_date = datetime.strptime(expected_date_str, "%d/%m/%Y")
+                    except ValueError:
+                        return jsonify({'error': 'Formato de data inválido (esperado: DD/MM/YYYY)'}), 400
+                else:
+                    activity.expected_date = None
 
         activity.updated_at = datetime.utcnow()
         db.session.commit()
@@ -151,7 +161,7 @@ def update_activity(activity_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': f'Erro ao atualizar atividade: {str(e)}'}), 500
-
+    
 @activity_bp.route('/activities/<activity_id>/toggle', methods=['PUT'])
 @jwt_required()
 def toggle_activity_status(activity_id):
